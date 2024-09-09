@@ -1,0 +1,6 @@
+@simplonCine_sessions_HostAddress = http://localhost:5257
+
+GET {{simplonCine_sessions_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
