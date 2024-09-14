@@ -23,17 +23,17 @@ jobs:
         with:
           dotnet-version: '8.0.x' # Assurez-vous que la version .NET correspond à votre projet
 
-      # Étape 3 : Restaurer les dépendances (en spécifiant le chemin vers le projet dans simploCine-sessions)
+      # Étape 3 : Restaurer les dépendances (en spécifiant le chemin vers le projet dans simplonCine-sessions)
       - name: Restore dependencies
-        run: dotnet restore simploCine-sessions/simploCine-sessions.sln --no-cache
+        run: dotnet restore simplonCine-sessions/simplonCine-sessions.sln --no-cache
 
       # Étape 4 : Compiler la solution
       - name: Build solution
-        run: dotnet build simploCine-sessions/simploCine-sessions.csproj --configuration Release --no-restore
+        run: dotnet build simplonCine-sessions/simplonCine-sessions.csproj --configuration Release --no-restore
 
       # Étape 5 : Exécuter les tests unitaires avec la collecte de couverture de code
       - name: Run tests with code coverage
-        run: dotnet test simploCine-sessions.Tests/simploCine-sessions.Tests.csproj --no-restore --collect:"XPlat Code Coverage" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./TestResults/coverage.opencover.xml --verbosity minimal
+        run: dotnet test simplonCine-sessions.Tests/simplonCine-sessions.Tests.csproj --no-restore --collect:"XPlat Code Coverage" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./TestResults/coverage.opencover.xml --verbosity minimal
 
       # Étape 6 : Analyse SonarCloud (y compris la couverture de code)
       - name: SonarCloud Scan
@@ -41,8 +41,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           dotnet tool install --global dotnet-sonarscanner
-          dotnet sonarscanner begin /k:"Talicke_Api-gateway" /o:"talicke" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths="simploCine-sessions.Tests/TestResults/coverage.opencover.xml"
-          dotnet build simploCine-sessions/simploCine-sessions.sln
+          dotnet sonarscanner begin /k:"Talicke_Api-gateway" /o:"talicke" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths="simplonCine-sessions.Tests/TestResults/coverage.opencover.xml"
+          dotnet build simplonCine-sessions/simplonCine-sessions.sln
           dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
       # Étape 7 : Installer ReportGenerator (pour générer un rapport lisible)
@@ -65,7 +65,7 @@ jobs:
 
       # Étape 10 : Publier les artefacts de compilation (facultatif)
       - name: Publish artifact (optional)
-        run: dotnet publish simploCine-sessions/simploCine-sessions.csproj --configuration Release --output ./publish
+        run: dotnet publish simplonCine-sessions/simplonCine-sessions.csproj --configuration Release --output ./publish
 
       # Étape 11 : Publier les résultats des tests (mise à jour vers v3)
       - name: Upload test results
