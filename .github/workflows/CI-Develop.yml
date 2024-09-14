@@ -1,0 +1,86 @@
+name: CI for .NET Core API Gateway
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Étape 1 : Vérification du code source depuis le repo
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Étape 2 : Installer le SDK .NET Core
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x' # Assurez-vous que la version .NET correspond à votre projet
+
+      # Étape 3 : Restaurer les dépendances (en spécifiant le chemin vers le projet dans simploCine-sessions)
+      - name: Restore dependencies
+        run: dotnet restore simploCine-sessions/simploCine-sessions.sln --no-cache
+
+      # Étape 4 : Compiler la solution
+      - name: Build solution
+        run: dotnet build simploCine-sessions/simploCine-sessions.csproj --configuration Release --no-restore
+
+      # Étape 5 : Exécuter les tests unitaires avec la collecte de couverture de code
+      - name: Run tests with code coverage
+        run: dotnet test simploCine-sessions.Tests/simploCine-sessions.Tests.csproj --no-restore --collect:"XPlat Code Coverage" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./TestResults/coverage.opencover.xml --verbosity minimal
+
+      # Étape 6 : Analyse SonarCloud (y compris la couverture de code)
+      - name: SonarCloud Scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          dotnet tool install --global dotnet-sonarscanner
+          dotnet sonarscanner begin /k:"Talicke_Api-gateway" /o:"talicke" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths="simploCine-sessions.Tests/TestResults/coverage.opencover.xml"
+          dotnet build simploCine-sessions/simploCine-sessions.sln
+          dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+
+      # Étape 7 : Installer ReportGenerator (pour générer un rapport lisible)
+      - name: Install ReportGenerator
+        run: dotnet tool install --global dotnet-reportgenerator-globaltool
+
+      # Étape 8 : Générer le rapport de couverture de code
+      - name: Generate code coverage report
+        run: reportgenerator "-reports:**/coverage.cobertura.xml" "-targetdir:coverage-report" "-reporttypes:Html"
+
+      # Étape 9 : Publier le rapport de couverture de code en tant qu'artefact
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: code-coverage-report
+          path: coverage-report
+
+      - name: List all files
+        run: ls -R .
+
+      # Étape 10 : Publier les artefacts de compilation (facultatif)
+      - name: Publish artifact (optional)
+        run: dotnet publish simploCine-sessions/simploCine-sessions.csproj --configuration Release --output ./publish
+
+      # Étape 11 : Publier les résultats des tests (mise à jour vers v3)
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: '**/TestResults/*.trx'
+
+      # Étape 12 : Upload de la couverture de code vers Codecov
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }} # Utilisé seulement pour les dépôts privés
+          files: '**/coverage.cobertura.xml' # Fichier OpenCover généré par Coverlet
+          flags: unittests
+          name: code-coverage-report
+          fail_ci_if_error: true

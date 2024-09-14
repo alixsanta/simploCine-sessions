@@ -1,0 +1,26 @@
+node_modules/
+
+# Ignorer les dossiers bin et obj dans simplonCine-sessions
+simplonCine-sessions/bin/
+simplonCine-sessions/obj/
+
+# Ignorer les packages et dépendances NuGet dans simplonCine-sessions
+simplonCine-sessions/packages/
+simplonCine-sessions/*.nupkg
+simplonCine-sessions/project.lock.json
+simplonCine-sessions/project.fragment.lock.json
+
+# Ignorer les fichiers générés par Visual Studio ou d'autres IDE
+simplonCine-sessions/*.user
+simplonCine-sessions/*.rsuser
+simplonCine-sessions/*.suo
+simplonCine-sessions/*.sln.docstates
+simplonCine-sessions/.vs/
+simplonCine-sessions/.vscode/
+
+# Ignorer le dossier .nuget
+simplonCine-sessions/.nuget/
+
+# Ignorer les fichiers de logs et les fichiers temporaires des IDE
+simplonCine-sessions/*.log
+simplonCine-sessions/.idea/
