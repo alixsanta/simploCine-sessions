@@ -41,7 +41,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           dotnet tool install --global dotnet-sonarscanner
-          dotnet sonarscanner begin /k:"alixsanta_simploCine-sessions" /o:"alixsanta" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths="simplonCine-sessions.Tests/TestResults/coverage.opencover.xml"
+          dotnet sonarscanner begin /k:"alixsanta_simploCine-sessions" /o:"alixsanta" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths="**/coverage.cobertura.xml"
           dotnet build simplonCine-sessions/simplonCine-sessions.sln
           dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
