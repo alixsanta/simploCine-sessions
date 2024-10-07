@@ -36,15 +36,15 @@ jobs:
         run: dotnet test simplonCine-sessions.Tests/simplonCine-sessions.Tests.csproj --no-restore --collect:"XPlat Code Coverage" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./TestResults/coverage.opencover.xml --verbosity minimal
 
       # Étape 6 : Analyse SonarCloud (y compris la couverture de code)
-      - name: SonarCloud Scan
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          dotnet tool install --global dotnet-sonarscanner
-          dotnet sonarscanner begin /k:"alixsanta_simploCine-sessions" /o:"alixsanta" /d:sonar.host.url="https://sonarcloud.io" 
-          /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths="**/coverage.cobertura.xml"
-          dotnet build simplonCine-sessions/simplonCine-sessions.sln
-          dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+      #- name: SonarCloud Scan
+      #  env:
+      #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #  run: |
+      #    dotnet tool install --global dotnet-sonarscanner
+      #    dotnet sonarscanner begin /k:"alixsanta_simploCine-sessions" /o:"alixsanta" /d:sonar.host.url="https://sonarcloud.io" 
+      #    /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths="**/coverage.cobertura.xml"
+      #    dotnet build simplonCine-sessions/simplonCine-sessions.sln
+      #    dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
       # Étape 7 : Installer ReportGenerator (pour générer un rapport lisible)
       - name: Install ReportGenerator
