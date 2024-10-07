@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("simplonCine-sessions.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7a54ec805b0cf0adc6f4e3d28dc46eb7d43200b8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0cc4d55fc703fa38efbb654fd700b9ec37ec874e")]
 [assembly: System.Reflection.AssemblyProductAttribute("simplonCine-sessions.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("simplonCine-sessions.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
